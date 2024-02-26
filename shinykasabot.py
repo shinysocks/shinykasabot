@@ -1,13 +1,11 @@
-# https://singlecolorimage.com/
-
 import asyncio
 import colorsys
 from kasa import SmartBulb
 from telebot.async_telebot import AsyncTeleBot
 
-TOKEN = "6651500714:AAFkZwUv5bl20xwwXJswg6qh9xgMCHEramk"
-BULB_IP = "192.168.0.22"
-BULB_NAME = "bulbington"
+TOKEN = ""
+BULB_IP = ""
+BULB_NAME = "Bulby"
 
 bot = AsyncTeleBot(TOKEN)
 
@@ -71,12 +69,8 @@ async def onoff(message):
 @bot.message_handler(commands=['preset'])
 async def preset(message):
     preset = message.text.split("/preset ")[1].strip()
-    if preset == "party":
-        pass
-        await status(message)
-    else:
-        await set_rgb(presets.get(preset))
-        await status(message)
+    await set_rgb(presets.get(preset))
+    await status(message)
 
 
 async def set_rgb(rgb):
