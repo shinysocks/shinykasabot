@@ -3,9 +3,9 @@ import colorsys
 from kasa import SmartBulb
 from telebot.async_telebot import AsyncTeleBot
 
-TOKEN = ""
-BULB_IP = ""
-BULB_NAME = "Bulby"
+TOKEN = "6651500714:AAEB-jzFaSMD68cyh3bGnnH7DIAw866Au5w"
+BULB_IP = "192.168.1.201"
+BULB_NAME = "cave bulb"
 
 bot = AsyncTeleBot(TOKEN)
 
@@ -25,15 +25,19 @@ presets = {
 
 async def connect():
     global bulb
-    bulb = SmartBulb(BULB_IP)
-    await bulb.set_alias(BULB_NAME)
-    await bulb.update()
-    print("connected to " + bulb.alias)
+    try:
+        await bulb.update()
+    except (Exception):
+        print("reconnecting..")
+        bulb = SmartBulb(BULB_IP)
+        await bulb.set_alias(BULB_NAME)
+        await bulb.update()
+        print("connected to " + bulb.alias)
 
 
 @bot.message_handler(commands=['status'])
 async def status(message):
-    await bulb.update()
+    await connect()
 
     if bulb.is_on:
         photo = f"singlecolorimage.com/get/{await hsv_to_hex(bulb.hsv)}/5x5"
@@ -68,6 +72,8 @@ async def onoff(message):
 
 @bot.message_handler(commands=['preset'])
 async def preset(message):
+    await connect()
+
     preset = message.text.split("/preset ")[1].strip()
     await set_rgb(presets.get(preset))
     await status(message)
@@ -95,4 +101,4 @@ async def hsv_to_hex(hsv):
     return await rgb_to_hex([int(rgb[0] * 255), int(rgb[1] * 255), int(rgb[2] * 255)])
 
 asyncio.run(connect())
-asyncio.run(bot.polling())
+asyncio.run(bot.infinity_polling())
