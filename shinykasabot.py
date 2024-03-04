@@ -3,7 +3,7 @@ import colorsys
 from kasa import SmartBulb
 from telebot.async_telebot import AsyncTeleBot
 
-TOKEN = "6651500714:AAEB-jzFaSMD68cyh3bGnnH7DIAw866Au5w"
+TOKEN = ""
 BULB_IP = "192.168.1.201"
 BULB_NAME = "cave bulb"
 
